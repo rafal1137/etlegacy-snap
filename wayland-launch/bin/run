@@ -1,0 +1,53 @@
+#!/bin/sh
+set -e
+
+pack_downloader() {
+if [ -f /usr/bin/curl ]; then
+	curl -P ${SNAP_USER_DATA}/.etlegacy/etmain $1
+else
+	wget -P ${SNAP_USER_DATA}/.etlegacy/etmain $1
+fi
+}
+
+for dir in */ ;
+do
+	if [ ! -d ${SNAP_USER_DATA}/.etlegacy ]; then
+	    mkdir ${SNAP_USER_DATA}/.etlegacy
+	    
+	    if [ ! -d ${SNAP_USER_DATA}/.etlegacy/etmain ]; then
+		mkdir ${SNAP_USER_DATA}/.etlegacy/etmain
+	    	cp -R ${SNAP}/usr/local/lib/etlegacy/etmain ${SNAP_USER_DATA}/.etlegacy
+	    fi
+	    
+	    if [ ! -d ${SNAP_USER_DATA}/.etlegacy/legacy ]; then
+		mkdir ${SNAP_USER_DATA}/.etlegacy/legacy
+		cp -R ${SNAP}/usr/local/lib/etlegacy/legacy ${SNAP_USER_DATA}/.etlegacy
+	    	wget `curl https://www.etlegacy.com/download | grep "All supported archive" | grep -Eoi '<a [^>]+>' |  grep -Eo 'href=\"[^\\\"]+\"' |  grep -Eo '(http|https):\/\/[^\"]+'` -O ${SNAP_USER_DATA}/.etlegacy/etl.zip
+		unzip ${SNAP_USER_DATA}/.etlegacy/etl.zip -d ${SNAP_USER_DATA}/.etlegacy/etl
+		mv ${SNAP_USER_DATA}/.etlegacy/etl/*.pk3 ${SNAP_USER_DATA}/.etlegacy/legacy
+		rm -rf ${SNAP_USER_DATA}/.etlegacy/etl
+		rm -rf ${SNAP_USER_DATA}/.etlegacy/*.zip
+	    fi
+	    
+	    if [ ! -f ${SNAP_USER_DATA}/.etlegacy/etmain/pak0.pk3 ]; then
+		pack_downloader https://mirror.etlegacy.com/etmain/pak0.pk3
+	    fi
+
+	    if [ ! -f ${SNAP_USER_DATA}/.etlegacy/etmain/pak1.pk3 ]; then
+		pack_downloader https://mirror.etlegacy.com/etmain/pak1.pk3
+	    fi
+
+	    if [ ! -f ${SNAP_USER_DATA}/.etlegacy/etmain/pak2.pk3 ]; then
+		pack_downloader https://mirror.etlegacy.com/etmain/pak2.pk3
+	    fi
+	fi
+done
+
+case "${SNAP_ARCH}" in
+	amd64)
+ 		${SNAP}/usr/local/bin/etl.x86_64 ;;
+	arm64) 
+		# We will launch etl with prefix since snapcraft compiled it with it.
+		${SNAP}/usr/local/bin/etl.aarch64 ;;
+esac
+
