@@ -11,7 +11,7 @@ compression: lzo
 confinement: strict
 
 apps:
-  etl:
+  etl-wayland:
     command-chain: &_command-chain
       - bin/graphics-core22-wrapper
       - bin/wayland-launch
@@ -25,6 +25,22 @@ apps:
       - network
       - alsa
     environment: &_environment
+      PULSE_SERVER: unix:$XDG_RUNTIME_DIR/../pulse/native
+      PULSE_SYSTEM: 1
+      PULSE_RUNTIME_PATH: /var/run/pulse
+      LD_LIBRARY_PATH: ${LD_LIBRARY_PATH:+$LD_LIBRARY_PATH:}${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}:${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/pulseaudio
+
+  etl-x11:
+    command: bin/run
+    plugs:
+      - opengl
+      - x11
+      - hardware-observe
+      - audio-playback
+      - joystick
+      - network
+      - alsa
+    environment:
       PULSE_SERVER: unix:$XDG_RUNTIME_DIR/../pulse/native
       PULSE_SYSTEM: 1
       PULSE_RUNTIME_PATH: /var/run/pulse
@@ -136,6 +152,7 @@ parts:
       - libglew2.2
       - libgl1
       - libglu1-mesa
+      - libglx-mesa0
       - freeglut3
       - libjpeg8
       - libstdc++6
