@@ -152,7 +152,8 @@ parts:
       - libglew2.2
       - libgl1
       - libglu1-mesa
-      - libglx-mesa0
+      - libgl1-mesa-dri
+      - libgl1-mesa-glx
       - freeglut3
       - libjpeg8
       - libstdc++6
