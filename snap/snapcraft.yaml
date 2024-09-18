@@ -127,6 +127,7 @@ parts:
       - libglew-dev
       - libogg-dev
       - libvorbis-dev
+      - libopengl-dev
       - libgl1-mesa-dev
       - libglx-dev
       - freeglut3-dev
@@ -152,6 +153,7 @@ parts:
       - libtheora-bin
       - libvorbisfile3
       - libglew2.2
+      - libopengl0
       - libgl1
       - libglu1-mesa
       - libgl1-mesa-dri
