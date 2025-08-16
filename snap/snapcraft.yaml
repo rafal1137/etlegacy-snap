@@ -155,6 +155,7 @@ parts:
       - libglew2.2
       - libopengl0
       - libgl1
+      - libglvnd0
       - libglu1-mesa
       - libgl1-mesa-dri
       - libglx-mesa0
