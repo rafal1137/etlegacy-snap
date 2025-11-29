@@ -44,7 +44,7 @@ apps:
       PULSE_SERVER: unix:$XDG_RUNTIME_DIR/../pulse/native
       PULSE_SYSTEM: 1
       PULSE_RUNTIME_PATH: /var/run/pulse
-      LIBGL_DRIVERS_PATH: ${SNAP}/graphics/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/dri
+      LIBGL_DRIVERS_PATH: ${SNAP}/graphics/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}
       LD_LIBRARY_PATH: ${LD_LIBRARY_PATH:+$LD_LIBRARY_PATH:}${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}:${SNAP}/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/pulseaudio:${SNAP}/graphics/usr/lib/${SNAPCRAFT_ARCH_TRIPLET}/dri
 
   etlded:
