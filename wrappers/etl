@@ -43,11 +43,9 @@ do
 	fi
 done
 
-case "${SNAP_ARCH}" in
-	amd64)
- 		${SNAP}/usr/local/bin/etl.x86_64 ;;
-	arm64) 
-		# We will launch etl with prefix since snapcraft compiled it with it.
-		${SNAP}/usr/local/bin/etl.aarch64 ;;
+case "$SNAP_ARCH" in
+    amd64)   ${SNAP}/usr/local/bin/etl.x86_64 ;;
+    i386)    ${SNAP}/usr/local/bin/etl.i386 ;;
+    arm64)   ${SNAP}/usr/local/bin/etl.aarch64 ;;
+    *)       echo "Unsupported arch: $SNAP_ARCH"; exit 1 ;;
 esac
-

@@ -1,0 +1,99 @@
+name: etlegacy
+summary: FPS Game
+description: |
+  Welcome to ET: Legacy, an open source project that aims to create a fully compatible client
+  and server for the popular online FPS game Wolfenstein: Enemy Territory - whose gameplay
+  is still considered unmatched by many, despite its great age.
+base: core24
+adopt-info: etl
+compression: lzo
+confinement: strict
+source-code: https://github.com/etlegacy/etlegacy-snap
+website: https://www.etlegacy.com
+contact: https://discord.gg/UBAZFys
+issues: https://github.com/etlegacy/etlegacy/issues/
+
+license: GPL-3.0
+
+parts:
+  etl:
+    plugin: cmake
+    cmake-parameters:
+      - -DCROSS_COMPILE32=OFF
+      - -DRENDERER_DYNAMIC=OFF
+      - -DINSTALL_OMNIBOT=OFF
+      - -DBUILD_MOD_PK3=OFF
+      - -DBUNDLED_OPENSSL=OFF
+      - -DBUNDLED_WOLFSSL=OFF
+    source-type: git
+    source-branch: master
+    source: https://github.com/etlegacy/etlegacy
+    parse-info: [usr/local/share/metainfo/com.etlegacy.ETLegacy.metainfo.xml]
+    build-packages:
+      - g++
+      - gcc
+      - make
+      - autoconf
+      - automake
+      - autotools-dev
+      - m4
+      - libtool
+      - libglew-dev
+      - libopengl-dev
+      - libgl1-mesa-dev
+      - libglx-dev
+      - freeglut3-dev
+      - zlib1g-dev
+      - libminizip-dev
+      - libx11-dev
+      - libc-devtools
+      - libc6-dev
+      - libssl-dev
+      - libsoundio-dev
+      - nasm
+      - zip
+
+    stage-packages:
+      - libgl1
+      - libglvnd0
+      - libglu1-mesa
+      - libgl1-mesa-dri
+      - libglx-mesa0
+      - libstdc++6
+      - libsoundio2
+      - wget
+      - curl
+      - unzip
+
+  wrappers:
+    plugin: dump
+    after: [etl]
+    source: ./wrappers
+    organize:
+      etl: bin/etl
+      etlded: bin/etlded
+    prime:
+      - bin/etl
+      - bin/etlded
+
+apps:
+  etl:
+    command: bin/etl
+    plugs:
+      - opengl
+      - x11
+      - wayland
+      - audio-playback
+      - pulseaudio
+      - joystick
+      - network
+      - alsa
+      - hardware-observe
+
+  etlded:
+    command: bin/etlded
+    plugs:
+      - network
+      - network-bind
+      - hardware-observe
+

@@ -51,3 +51,10 @@ case "${SNAP_ARCH}" in
 		${SNAP}/usr/local/bin/etlded.aarch64 +set fs_homepath ${SNAP_USER_DATA}/.etlded +set g_protect 1 +set omnibot_enable 1 +set omnibot_path "${SNAP_USER_DATA}/.etlded/legacy/omni-bot" +exec etl_server.cfg ;;
 esac
 
+
+case "$SNAP_ARCH" in
+    amd64)   ${SNAP}/usr/local/bin/etlded.x86_64 +set fs_homepath ${SNAP_USER_DATA}/.etlded +set g_protect 1 +set omnibot_enable 1 +set omnibot_path "${SNAP_USER_DATA}/.etlded/legacy/omni-bot" +exec etl_server.cfg ;;
+    i386)    $SNAP/usr/local/bin/etlded.i386 +set fs_homepath ${SNAP_USER_DATA}/.etlded +set g_protect 1 +set omnibot_enable 1 +set omnibot_path "${SNAP_USER_DATA}/.etlded/legacy/omni-bot" +exec etl_server.cfg ;;
+    arm64)   $SNAP/usr/local/bin/etlded.aarch64 +set fs_homepath ${SNAP_USER_DATA}/.etlded +set g_protect 1 +set omnibot_enable 1 +set omnibot_path "${SNAP_USER_DATA}/.etlded/legacy/omni-bot" +exec etl_server.cfg ;;
+    *)       echo "Unsupported arch: $SNAP_ARCH"; exit 1 ;;
+esac
