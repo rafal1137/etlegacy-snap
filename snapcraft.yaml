@@ -1,5 +1,6 @@
 name: etlegacy
 summary: FPS Game
+version: 2.83.2
 description: |
   Welcome to ET: Legacy, an open source project that aims to create a fully compatible client
   and server for the popular online FPS game Wolfenstein: Enemy Territory - whose gameplay
@@ -12,62 +13,20 @@ source-code: https://github.com/etlegacy/etlegacy-snap
 website: https://www.etlegacy.com
 contact: https://discord.gg/UBAZFys
 issues: https://github.com/etlegacy/etlegacy/issues/
-
 license: GPL-3.0
 
 parts:
   etl:
-    plugin: cmake
-    cmake-parameters:
-      - -DCROSS_COMPILE32=OFF
-      - -DRENDERER_DYNAMIC=OFF
-      - -DINSTALL_OMNIBOT=OFF
-      - -DBUILD_MOD_PK3=OFF
-      - -DBUNDLED_OPENSSL=OFF
-      - -DBUNDLED_WOLFSSL=OFF
-    source-type: git
-    source-branch: master
-    source: https://github.com/etlegacy/etlegacy
-    parse-info: [usr/local/share/metainfo/com.etlegacy.ETLegacy.metainfo.xml]
-    build-packages:
-      - g++
-      - gcc
-      - make
-      - autoconf
-      - automake
-      - autotools-dev
-      - m4
-      - libtool
-      - libglew-dev
-      - libopengl-dev
-      - libgl1-mesa-dev
-      - libglx-dev
-      - freeglut3-dev
-      - zlib1g-dev
-      - libminizip-dev
-      - libx11-dev
-      - libc-devtools
-      - libc6-dev
-      - libssl-dev
-      - libsoundio-dev
-      - nasm
-      - zip
-
+    plugin: nil
     stage-packages:
-      - libgl1
-      - libglvnd0
-      - libglu1-mesa
-      - libgl1-mesa-dri
-      - libglx-mesa0
-      - libstdc++6
-      - libsoundio2
       - wget
       - curl
-      - unzip
-
+      - libgl1
+      - libasound2t64
+      - libasound2
+      - libasound2-plugins
   wrappers:
     plugin: dump
-    after: [etl]
     source: ./wrappers
     organize:
       etl: bin/etl
@@ -84,11 +43,12 @@ apps:
       - x11
       - wayland
       - audio-playback
-      - pulseaudio
       - joystick
       - network
       - alsa
       - hardware-observe
+    environment:
+      SDL_AUDIODRIVER: alsa
 
   etlded:
     command: bin/etlded
@@ -97,3 +57,17 @@ apps:
       - network-bind
       - hardware-observe
 
+layout:
+  # Other, generally useful paths
+  /usr/share/fonts:
+    bind: $SNAP/usr/share/fonts
+  /usr/share/icons:
+    bind: $SNAP/usr/share/icons
+  /usr/share/sounds:
+    bind: $SNAP/usr/share/sounds
+  /etc/fonts:
+    bind: $SNAP/etc/fonts
+  /usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FORPLET/alsa-lib:
+    bind: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/alsa-lib
+  /usr/share/alsa:
+    bind: $SNAP/usr/share/alsa
