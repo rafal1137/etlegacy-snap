@@ -2,34 +2,11 @@
 set -e
 pack_downloader() {
 if [ -f /usr/bin/curl ]; then
-curl -P ${SNAP_USER_DATA}/.etlegacy/etmain $1
+curl -P ${SNAP_USER_DATA}/etlegacy*/etmain $1
 else
-wget -P ${SNAP_USER_DATA}/.etlegacy/etmain $1
+wget -P ${SNAP_USER_DATA}/etlegacy*/etmain $1
 fi
 }
-for dir in */ ;
-do
-if [ ! -d ${SNAP_USER_DATA}/.etlegacy ]; then
-    mkdir ${SNAP_USER_DATA}/.etlegacy
-   
-    if [ ! -d ${SNAP_USER_DATA}/.etlegacy/etmain ]; then
-mkdir ${SNAP_USER_DATA}/.etlegacy/etmain
-    fi
-   
-    if [ ! -d ${SNAP_USER_DATA}/.etlegacy/legacy ]; then
-mkdir ${SNAP_USER_DATA}/.etlegacy/legacy
-    fi
-    if [ ! -f ${SNAP_USER_DATA}/.etlegacy/etmain/pak0.pk3 ]; then
-pack_downloader https://mirror.etlegacy.com/etmain/pak0.pk3
-    fi
-    if [ ! -f ${SNAP_USER_DATA}/.etlegacy/etmain/pak1.pk3 ]; then
-pack_downloader https://mirror.etlegacy.com/etmain/pak1.pk3
-    fi
-    if [ ! -f ${SNAP_USER_DATA}/.etlegacy/etmain/pak2.pk3 ]; then
-pack_downloader https://mirror.etlegacy.com/etmain/pak2.pk3
-    fi
-fi
-done
 if [ ! -d ${SNAP_USER_DATA}/etlegacy* ]; then
 case "$SNAP_ARCH" in
     amd64) wget `curl https://www.etlegacy.com/download | grep "x86_64 archive" | grep -Eoi '<a [^>]+>' | grep -Eo 'href=\"[^\\\"]+\"' | grep -Eo '(http|https):\/\/[^\"]+'` -O ${SNAP_USER_DATA}/etl.tar.gz
@@ -47,9 +24,32 @@ case "$SNAP_ARCH" in
     *) echo "Unsupported arch: $SNAP_ARCH"; exit 1 ;;
 esac
 fi
+for dir in */ ;
+do
+if [ ! -d ${SNAP_USER_DATA}/.etlegacy ]; then
+    mkdir ${SNAP_USER_DATA}/.etlegacy
+   
+    if [ ! -d ${SNAP_USER_DATA}/.etlegacy/etmain ]; then
+mkdir ${SNAP_USER_DATA}/.etlegacy/etmain
+    fi
+   
+    if [ ! -d ${SNAP_USER_DATA}/.etlegacy/legacy ]; then
+mkdir ${SNAP_USER_DATA}/.etlegacy/legacy
+    fi
+fi
+    if [ ! -f ${SNAP_USER_DATA}/etlegacy*/etmain/pak0.pk3 ]; then
+pack_downloader https://mirror.etlegacy.com/etmain/pak0.pk3
+    fi
+    if [ ! -f ${SNAP_USER_DATA}/etlegacy*/etmain/pak1.pk3 ]; then
+pack_downloader https://mirror.etlegacy.com/etmain/pak1.pk3
+    fi
+    if [ ! -f ${SNAP_USER_DATA}/etlegacy*/etmain/pak2.pk3 ]; then
+pack_downloader https://mirror.etlegacy.com/etmain/pak2.pk3
+    fi
+done
 case "$SNAP_ARCH" in
-    amd64) ${SNAP_USER_DATA}/etlegacy*/etl.x86_64 +set fs_basepath ${SNAP_USER_DATA}/etlegacy*/ ;;
-    i386) ${SNAP_USER_DATA}/etlegacy*/etl.i386 +set fs_basepath ${SNAP_USER_DATA}/etlegacy*/ ;;
-    arm64) ${SNAP_USER_DATA}/etlegacy*/etl.aarch64 +set fs_basepath ${SNAP_USER_DATA}/etlegacy*/ ;;
+    amd64) ${SNAP_USER_DATA}/etlegacy*/etl.x86_64 +set fs_basepath ${SNAP_USER_DATA}/etlegacy* ;;
+    i386) ${SNAP_USER_DATA}/etlegacy*/etl.i386 +set fs_basepath ${SNAP_USER_DATA}/etlegacy* ;;
+    arm64) ${SNAP_USER_DATA}/etlegacy*/etl.aarch64 +set fs_basepath ${SNAP_USER_DATA}/etlegacy* ;;
     *) echo "Unsupported arch: $SNAP_ARCH"; exit 1 ;;
 esac
