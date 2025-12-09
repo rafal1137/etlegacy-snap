@@ -8,7 +8,7 @@ description: |
 base: core24
 adopt-info: etl
 compression: lzo
-confinement: classic
+confinement: strict
 source-code: https://github.com/etlegacy/etlegacy-snap
 website: https://www.etlegacy.com
 contact: https://discord.gg/UBAZFys
@@ -22,9 +22,6 @@ parts:
       - wget
       - curl
       - libgl1
-      - libasound2t64
-      - libasound2
-      - libasound2-plugins
   wrappers:
     plugin: dump
     source: ./wrappers
@@ -37,6 +34,7 @@ parts:
 
 apps:
   etl:
+    extensions: [gnome]
     command: bin/etl
     plugs:
       - opengl
@@ -53,15 +51,4 @@ apps:
       - network
       - network-bind
       - hardware-observe
-
-layout:
-  # Other, generally useful paths
-  /usr/share/fonts:
-    bind: $SNAP/usr/share/fonts
-  /usr/share/icons:
-    bind: $SNAP/usr/share/icons
-  /usr/share/sounds:
-    bind: $SNAP/usr/share/sounds
-  /etc/fonts:
-    bind: $SNAP/etc/fonts
 
