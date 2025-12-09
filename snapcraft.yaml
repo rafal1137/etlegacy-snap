@@ -1,6 +1,6 @@
 name: etlegacy
 summary: FPS Game
-version: 2.83.2
+version: git
 description: |
   Welcome to ET: Legacy, an open source project that aims to create a fully compatible client
   and server for the popular online FPS game Wolfenstein: Enemy Territory - whose gameplay
@@ -15,9 +15,41 @@ contact: https://discord.gg/UBAZFys
 issues: https://github.com/etlegacy/etlegacy/issues/
 license: GPL-3.0
 
+platforms:
+  amd64:
+    build-on: [amd64]
+    build-for: [amd64]
+  arm64:
+    build-on: [amd64]
+    build-for: [arm64]
+
 parts:
   etl:
     plugin: nil
+    source: https://raw.githubusercontent.com/etlegacy/etlegacy/master/VERSION.txt
+    source-type: git
+    override-pull: |
+      set -e
+      
+      # Download the raw VERSION.txt
+      curl -L -o VERSION.txt \
+        https://raw.githubusercontent.com/etlegacy/etlegacy/master/VERSION.txt
+      
+      # Parse the three values
+      VERSION_MAJOR=$(grep "^VERSION_MAJOR" VERSION.txt | cut -d' ' -f2)
+      VERSION_MINOR=$(grep "^VERSION_MINOR" VERSION.txt | cut -d' ' -f2)
+      VERSION_PATCH=$(grep "^VERSION_PATCH" VERSION.txt | cut -d' ' -f2)
+      
+      # Construct the final version string
+      FULL_VERSION="${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}"
+      
+      echo "Detected ET:Legacy version: $FULL_VERSION"
+      
+      # Export it so Snapcraft can use it as the snap version
+      snapcraftctl set-version "$FULL_VERSION"
+      
+      # Optional: make it available to later stages/parts
+      echo "$FULL_VERSION" > $SNAPCRAFT_PART_SRC/version.txt
     stage-packages:
       - wget
       - curl
