@@ -8,7 +8,7 @@ description: |
 base: core24
 adopt-info: etl
 compression: lzo
-confinement: strict
+confinement: classic
 source-code: https://github.com/etlegacy/etlegacy-snap
 website: https://www.etlegacy.com
 contact: https://discord.gg/UBAZFys
@@ -45,10 +45,7 @@ apps:
       - audio-playback
       - joystick
       - network
-      - alsa
       - hardware-observe
-    environment:
-      SDL_AUDIODRIVER: alsa
 
   etlded:
     command: bin/etlded
@@ -67,7 +64,4 @@ layout:
     bind: $SNAP/usr/share/sounds
   /etc/fonts:
     bind: $SNAP/etc/fonts
-  /usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FORPLET/alsa-lib:
-    bind: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/alsa-lib
-  /usr/share/alsa:
-    bind: $SNAP/usr/share/alsa
+
