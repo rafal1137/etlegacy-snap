@@ -15,14 +15,6 @@ contact: https://discord.gg/UBAZFys
 issues: https://github.com/etlegacy/etlegacy/issues/
 license: GPL-3.0
 
-platforms:
-  amd64:
-    build-on: [amd64]
-    build-for: [amd64]
-  arm64:
-    build-on: [amd64]
-    build-for: [arm64]
-
 parts:
   etl:
     plugin: nil
