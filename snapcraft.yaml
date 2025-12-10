@@ -20,6 +20,8 @@ parts:
     plugin: nil
     source: https://raw.githubusercontent.com/etlegacy/etlegacy/master/VERSION.txt
     source-type: git
+	build-packages:
+      - curl
     override-pull: |
       set -e
       
